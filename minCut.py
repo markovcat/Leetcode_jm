@@ -21,31 +21,41 @@ class Solution:
             return None
         
         isPal = [[False for _ in range(len(s))] for _ in range(len(s))]
-        for length in range(0, len(s)): # max length is len(s) - 1
-            for i in range(0, len(s) - length): # max i is len(s) - length - 1
-                j = i + length  # max j is len(s) - 1
-                if length <= 2:
+        minCuts = [9223372036854775807] * (len(s))
+        minCuts[-1] = 0
+
+        for i in reversed(range(0, len(s))):
+            for j in range(i, len(s) - 1):
+                if j - i <= 2:
                     isPal[i][j] = s[i] == s[j]
                 else:
-                    isPal[i][j] = isPal[i + 1][j - 1] and s[i] == s[j]
+                    isPal[i][j] = s[i] == s[j] and isPal[i + 1][j - 1]
 
-        print(isPal)
+                minCuts[i] = min(minCuts[i], minCuts[j + 1] + 1)
 
-        minCuts = [9223372036854775807] * (len(s))
-        minCuts[0] = 0
-        for i in range(1, len(s)): # max i is len(s) - 1
-            if isPal[0][i]:
-                minCuts[i] = 0
-                continue
+        return minCuts[0]
+
+
+        # for length in range(0, len(s)): 
+        #     for i in range(0, len(s) - length): 
+        #         j = i + length  
+        #         if length <= 2:
+        #             isPal[i][j] = s[i] == s[j]
+        #         else:
+        #             isPal[i][j] = isPal[i + 1][j - 1] and s[i] == s[j]
+        # print(isPal)
+
+        # for i in range(1, len(s)): 
+        #     if isPal[0][i]:
+        #         minCuts[i] = 0
+        #         continue
             
-            for j in range(0, i): # max j is i
-                if isPal[j + 1][i]: # s[j:i + 1] is Pal
-                # if self.isPalindrome(s[j:i]):
-                    minCuts[i] = min(minCuts[j] + 1, minCuts[i])
+        #     for j in range(0, i): 
+        #         if isPal[j + 1][i]: 
+        #             minCuts[i] = min(minCuts[j] + 1, minCuts[i])
         
-        return(minCuts[len(s) - 1])
+        # return(minCuts[len(s) - 1])
 
-s = "ab"
-# print(Solution().isPalindrome(s))
+s = "aba"
 print(s)
 print(Solution().minCut(s))
